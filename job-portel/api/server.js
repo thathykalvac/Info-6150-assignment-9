@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 
 dotenv.config(); // Load environment variables from .env
 
-const userRouter = require('./routes/userRoutes');
+const userRouter = require('./routes/userRoutes'); // Assuming this is where the user routes are defined
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Job Portal API!');
 });
 
-// Use router for authentication
-app.use('/api/auth', userRouter);
+// Register new user route - ensure this is correctly routed
+app.use('/api', userRouter);  // Mounting userRouter to handle /register and other user-related routes
 
 // Serve static images from "images" folder inside "api"
 app.use('/images', express.static(path.join(__dirname, 'images')));
