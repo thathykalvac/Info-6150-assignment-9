@@ -4,10 +4,10 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const User = require('./models/user'); // Assuming this is your User model
+const userRouter = require('./routes/userRoutes'); // User routes
 
 dotenv.config(); // Load environment variables from .env
-
-const userRouter = require('./routes/userRoutes'); // Assuming this is where the user routes are defined
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,47 +27,28 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Job Portal API!');
 });
 
-// Register new user route - ensure this is correctly routed
-app.use('/api', userRouter);  // Mounting userRouter to handle /register and other user-related routes
+// Register new user route
+app.use('/api', userRouter);
 
-// Serve static images from "images" folder inside "api"
-app.use('/images', express.static(path.join(__dirname, 'images')));
+// Serve uploaded images from "uploads" folder
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// API endpoint to get company details
-app.get('/api/companies', (req, res) => {
-  const companies = [
-    {
-      id: 1,
-      name: 'Tech Solutions Ltd.',
-      imageUrl: 'http://localhost:3000/images/tech-solutions.jpeg',
-    },
-    {
-      id: 2,
-      name: 'Creative Corp.',
-      imageUrl: 'http://localhost:3000/images/creative-corp.png',
-    },
-    {
-      id: 3,
-      name: 'Design Innovators Inc.',
-      imageUrl: 'http://localhost:3000/images/design-innovators.png',
-    },
-    {
-      id: 4,
-      name: 'Green Energy Solutions',
-      imageUrl: 'http://localhost:3000/images/green-energy.jpeg',
-    },
-    {
-      id: 5,
-      name: 'Health Tech Co.',
-      imageUrl: 'http://localhost:3000/images/health-tech.png',
-    },
-    {
-      id: 6,
-      name: 'Smart Homes Inc.',
-      imageUrl: 'http://localhost:3000/images/smart-homes.jpeg',
-    },
-  ];
-  res.json(companies);
+// API endpoint to get company details dynamically
+app.get('/api/companies', async (req, res) => {
+  try {
+    const usersWithCompanies = await User.find({ companyName: { $ne: null }, image: { $ne: null } })
+      .select('companyName image'); // Select only necessary fields
+
+    const companies = usersWithCompanies.map(user => ({
+      name: user.companyName,
+      imageUrl: `http://localhost:${PORT}/${user.image.replace(/\\/g, '/')}` // Serve image dynamically
+    }));
+
+    res.json(companies);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error fetching companies' });
+  }
 });
 
 // Start Server

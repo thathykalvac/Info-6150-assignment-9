@@ -18,7 +18,7 @@ The project consists of several pages and components, which are designed to work
    
 2. **Job Listings**: Displays a list of available job opportunities, including job titles, descriptions, salary ranges, and the skills required. Each listing provides a link to apply for the job.
 
-3. **Company Showcase**: A page showcasing different companies that are hiring, with information about each company and their job openings.
+3. **Company Showcase**: A page showcasing different companies that users have uploaded from mongo and postman.
 
 4. **Contact**: A simple page for contacting support or providing feedback.
 
@@ -30,7 +30,7 @@ The project consists of several pages and components, which are designed to work
   
 - **JobListingsPage**: This component is responsible for rendering job listings. It dynamically displays jobs from an array of data, using Material-UI components like `Paper`, `Grid`, and `Chip`. Each job includes details such as title, description, salary, skills, and an "Apply Now" button that directs users to an external link.
   
-- **Company Showcase**: Displays a list of companies with their logos and descriptions. This is similar to the job listings but focuses more on the companies rather than the individual roles.
+- **Company Showcase**: Displays a list of companies with their logos and descriptions. This is similar to the job listings but focuses more on the companies rather than the individual roles uploaded by users.
   
 - **Responsive Design**: The application is designed to be responsive. The layout adapts to different screen sizes, ensuring that the user experience is smooth on mobile, tablet, and desktop devices.
 
